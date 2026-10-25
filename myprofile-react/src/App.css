@@ -1,0 +1,991 @@
+
+/* =========================================
+   MYPROFILE — DESIGN SYSTEM v2
+   Premium portfolio UI — Phase 1
+   Navbar + Hero redesign
+   All other sections (buttons, forms,
+   project cards, skills, footer) unchanged.
+========================================= */
+
+/* ── Design Tokens ─────────────────────── */
+:root {
+  /* Typography */
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Brand palette */
+  --primary:        #4f46e5;   /* rich indigo */
+  --primary-dark:   #3730a3;
+  --primary-light:  #818cf8;
+  --accent:         #06b6d4;   /* cyan spark */
+  --accent-soft:    rgba(6, 182, 212, 0.12);
+
+  /* Neutrals */
+  --text:           #0f172a;   /* slate-900 */
+  --text-secondary: #334155;   /* slate-700 */
+  --muted:          #64748b;   /* slate-500 */
+  --subtle:         #94a3b8;   /* slate-400 */
+  --border:         #e2e8f0;   /* slate-200 */
+  --border-soft:    rgba(226, 232, 240, 0.6);
+
+  /* Surfaces */
+  --surface:        #ffffff;
+  --surface-raised: #f8faff;
+  --background:     #f1f5f9;   /* slate-100 */
+
+  /* Feedback */
+  --success:        #059669;
+  --danger:         #dc2626;
+
+  /* Geometry */
+  --radius:         14px;
+  --radius-lg:      20px;
+  --radius-xl:      28px;
+
+  /* Elevation */
+  --shadow-xs:  0 1px 3px rgba(15, 23, 42, 0.06),
+                0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-sm:  0 4px 12px rgba(15, 23, 42, 0.06),
+                0 2px 4px  rgba(15, 23, 42, 0.04);
+  --shadow-md:  0 8px 24px rgba(15, 23, 42, 0.08),
+                0 4px 8px  rgba(15, 23, 42, 0.04);
+  --shadow-lg:  0 16px 48px rgba(15, 23, 42, 0.10),
+                0 6px 16px rgba(15, 23, 42, 0.06);
+  --shadow-glow: 0 0 0 3px rgba(79, 70, 229, 0.18);
+
+  /* Transitions */
+  --ease-out:   cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+  --duration-fast: 150ms;
+  --duration-base: 220ms;
+  --duration-slow: 350ms;
+}
+
+/* ── Global Resets ─────────────────────── */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+body,
+button,
+input,
+textarea {
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+}
+
+button,
+input,
+textarea {
+  font-size: 14px;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--primary-dark);
+}
+
+button {
+  cursor: pointer;
+  transition:
+    background var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2.5px solid var(--primary);
+  outline-offset: 2px;
+}
+
+h1, h2, h3, p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 14px;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  line-height: 1.18;
+  letter-spacing: -0.04em;
+  color: var(--text);
+}
+
+h2 {
+  font-size: 1.35rem;
+  line-height: 1.35;
+  color: var(--text);
+}
+
+p {
+  color: var(--muted);
+}
+
+/* ── Application Layout ────────────────── */
+#root {
+  min-height: 100vh;
+}
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.main-content {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 48px 28px 72px;
+  flex: 1;
+}
+
+.content-section {
+  width: 100%;
+}
+
+.content-card {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 36px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.content-card > p {
+  margin-bottom: 24px;
+}
+
+/* =========================================
+   NAVIGATION BAR — Premium Glassmorphism
+========================================= */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  padding: 0 max(24px, calc((100% - 1200px) / 2));
+  height: 66px;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.7);
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.04),
+              0 4px 16px rgba(15, 23, 42, 0.04);
+  transition: box-shadow var(--duration-slow) var(--ease-out);
+}
+
+/* Brand logotype */
+.brand {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  text-decoration: none;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.brand:hover {
+  opacity: 0.82;
+  color: var(--text);
+}
+
+/* Brand monogram badge */
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+  color: white;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.35);
+  transition: transform var(--duration-base) var(--ease-out),
+              box-shadow var(--duration-base) var(--ease-out);
+}
+
+.brand:hover .brand-mark {
+  transform: rotate(-4deg) scale(1.06);
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.45);
+}
+
+.brand-dot {
+  margin-left: -10px;
+  color: var(--primary);
+  font-weight: 900;
+}
+
+/* Nav links container */
+.navbar nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+
+/* Every nav link / button shares base pill styling */
+.navbar nav > a,
+.navbar nav > button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  color: var(--muted);
+  background: transparent;
+  font-size: 13.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    background var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+
+.navbar nav > a:hover,
+.navbar nav > button:hover {
+  color: var(--text);
+  background: rgba(79, 70, 229, 0.06);
+  border-color: rgba(79, 70, 229, 0.1);
+}
+
+/* Active state — subtle filled pill */
+.navbar nav > a.active {
+  color: var(--primary);
+  background: rgba(79, 70, 229, 0.09);
+  border-color: rgba(79, 70, 229, 0.15);
+  font-weight: 700;
+}
+
+/* Contact CTA — accent pill */
+.navbar nav > a.nav-contact {
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.28);
+  padding: 0 16px;
+  font-weight: 700;
+}
+
+.navbar nav > a.nav-contact:hover {
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--primary-dark) 0%, #6d28d9 100%);
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.38);
+  transform: translateY(-1px);
+}
+
+.navbar nav > a.nav-contact.active {
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--primary-dark) 0%, #6d28d9 100%);
+}
+
+/* =========================================
+   HERO / HOME — Premium gradient stage
+========================================= */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: clamp(64px, 10vw, 120px) clamp(24px, 5vw, 64px);
+  min-height: 500px;
+
+  /* Multi-layer gradient backdrop */
+  background:
+    radial-gradient(ellipse 60% 50% at 85% 10%, rgba(124, 58, 237, 0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 10% 85%, rgba(6, 182, 212, 0.09) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 50% 0%,   rgba(79, 70, 229, 0.06) 0%, transparent 60%),
+    linear-gradient(160deg, #ffffff 0%, #f5f3ff 45%, #eff6ff 100%);
+
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+}
+
+/* Decorative floating orbs (purely CSS, no JS) */
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: heroFloat 8s var(--ease-in-out) infinite alternate;
+}
+
+.hero::before {
+  width: 360px;
+  height: 360px;
+  top: -100px;
+  right: -80px;
+  background: radial-gradient(circle, rgba(79, 70, 229, 0.09) 0%, transparent 70%);
+  animation-delay: 0s;
+}
+
+.hero::after {
+  width: 280px;
+  height: 280px;
+  bottom: -60px;
+  left: -40px;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.08) 0%, transparent 70%);
+  animation-delay: -4s;
+}
+
+@keyframes heroFloat {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(12px, -18px) scale(1.06); }
+}
+
+/* Stack all hero children above orbs */
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Eyebrow label */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: rgba(79, 70, 229, 0.08);
+  border: 1px solid rgba(79, 70, 229, 0.18);
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Eyebrow pulse dot */
+.eyebrow::before {
+  content: "";
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.5);
+  animation: eyebrowPulse 2.4s var(--ease-in-out) infinite;
+  flex-shrink: 0;
+}
+
+@keyframes eyebrowPulse {
+  0%   { box-shadow: 0 0 0 0   rgba(6, 182, 212, 0.55); }
+  60%  { box-shadow: 0 0 0 6px rgba(6, 182, 212, 0);    }
+  100% { box-shadow: 0 0 0 0   rgba(6, 182, 212, 0);    }
+}
+
+/* Hero headline */
+.hero h1 {
+  max-width: 780px;
+  margin: 0 auto 20px;
+  font-size: clamp(2.8rem, 7.5vw, 5.2rem);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.05em;
+  color: transparent;
+  background: linear-gradient(
+    140deg,
+    var(--text)     0%,
+    var(--text)     40%,
+    var(--primary)  70%,
+    #7c3aed        100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Hero sub-copy */
+.hero > p {
+  max-width: 560px;
+  margin: 0 auto 32px;
+  font-size: clamp(15px, 2.2vw, 18px);
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+/* =========================================
+   EYEBROW used outside hero (other pages)
+========================================= */
+/* Resets the pill look to a plain label for non-hero contexts */
+.content-card .eyebrow,
+.content-section .eyebrow {
+  display: inline-block;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  margin-bottom: 10px;
+  font-size: 11px;
+}
+
+/* Remove the pulse dot outside the hero */
+.content-card .eyebrow::before,
+.content-section .eyebrow::before {
+  display: none;
+}
+
+
+
+
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.primary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 12px 21px;
+  color: #ffffff;
+  background: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 750;
+  line-height: 1.4;
+  text-align: center;
+  box-shadow: 0 5px 12px rgba(49, 91, 234, 0.15);
+}
+
+.primary-btn:hover:not(:disabled) {
+  color: #ffffff;
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+  box-shadow: 0 8px 18px rgba(49, 91, 234, 0.23);
+  transform: translateY(-1px);
+}
+
+form button[type="button"],
+.project-actions button,
+.navbar nav > button {
+  min-height: 38px;
+  padding: 9px 15px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  font-weight: 650;
+}
+
+form button[type="button"] {
+  margin-left: 8px;
+  color: #475467;
+  background: #ffffff;
+}
+
+form button[type="button"]:hover {
+  background: #f2f4f7;
+  border-color: #cbd3e1;
+}
+
+/* =========================================
+   FORMS - IMPORTANT LAYOUT FIX
+========================================= */
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  width: 100%;
+}
+
+form label {
+  display: block;
+  margin-top: 7px;
+  margin-bottom: 0;
+  color: #344054;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+form input,
+form textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0 0 7px;
+  padding: 12px 14px;
+  color: var(--text);
+  background: #ffffff;
+  border: 1px solid #d5dce8;
+  border-radius: 9px;
+  outline: none;
+  font-size: 14px;
+  line-height: 1.5;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.025);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+form input {
+  min-height: 45px;
+}
+
+form textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+form input::placeholder,
+form textarea::placeholder {
+  color: #98a2b3;
+  opacity: 1;
+}
+
+form input:focus,
+form textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(49, 91, 234, 0.1);
+}
+
+form input[type="email"],
+form input[type="password"],
+form input[type="text"],
+form input[type="url"] {
+  appearance: none;
+}
+
+form button[type="submit"] {
+  align-self: flex-start;
+  margin-top: 12px;
+}
+
+.content-card form {
+  margin-top: 25px;
+}
+
+#project-form {
+  margin: 38px auto 0;
+  padding: 34px;
+  scroll-margin-top: 100px;
+}
+
+#project-form h2 {
+  margin-bottom: 8px;
+}
+
+#project-form > p {
+  margin-bottom: 22px;
+}
+
+#project-form form {
+  gap: 9px;
+}
+
+#project-form form label {
+  margin-top: 7px;
+}
+
+#project-form form input,
+#project-form form textarea {
+  margin-bottom: 4px;
+}
+
+.image-preview {
+  width: 100%;
+  margin: 8px 0 12px;
+  padding: 14px;
+  background: #f8faff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.image-preview p {
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.image-preview img {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  max-height: 220px;
+  object-fit: contain;
+  background: #ffffff;
+  border-radius: 8px;
+}
+
+/* =========================================
+   PROJECT GRID AND CARDS
+========================================= */
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 24px;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.project-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 25px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 22px rgba(31, 48, 82, 0.035);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.project-card:hover {
+  border-color: #cbd7ff;
+  box-shadow: 0 14px 30px rgba(31, 48, 82, 0.08);
+  transform: translateY(-3px);
+}
+
+.project-image {
+  display: block;
+  width: 100%;
+  height: 190px;
+  margin-bottom: 20px;
+  object-fit: cover;
+  background: #f1f4fb;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+}
+
+.project-icon {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 17px;
+  place-items: center;
+  color: var(--primary);
+  background: #edf2ff;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.project-card h2 {
+  margin-bottom: 10px;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.project-card > p {
+  margin-bottom: 18px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.project-tech {
+  display: inline-block;
+  margin: 0 0 16px;
+  padding: 6px 10px;
+  color: #4058a5;
+  background: #f0f4ff;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.project-links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: auto;
+  margin-bottom: 15px;
+}
+
+.project-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 11px;
+  color: var(--primary);
+  background: #f4f6ff;
+  border: 1px solid #e2e8ff;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.project-link:hover {
+  color: #ffffff;
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.project-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  width: 100%;
+  margin-top: 8px;
+  padding-top: 15px;
+  border-top: 1px solid #edf0f5;
+}
+
+.project-actions button {
+  color: #344054;
+  background: #ffffff;
+}
+
+.project-actions button:first-child:hover {
+  color: var(--primary);
+  background: #f0f4ff;
+  border-color: #cad6ff;
+}
+
+.project-actions button:last-child {
+  color: var(--danger);
+  background: #ffffff;
+}
+
+.project-actions button:last-child:hover {
+  background: #fff0f2;
+  border-color: #ffc9d0;
+}
+
+/* =========================================
+   SKILLS
+========================================= */
+
+.skill-list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 11px;
+  margin: 20px 0;
+}
+
+.skill {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 15px;
+  color: #344b9a;
+  background: #edf2ff;
+  border: 1px solid #dfe7ff;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* =========================================
+   MESSAGES
+========================================= */
+
+.error-message {
+  padding: 12px 15px;
+  color: #b42336;
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  border-radius: 9px;
+  font-size: 14px;
+}
+
+[role="status"] {
+  padding: 12px 15px;
+  color: var(--success);
+  background: #ecfdf3;
+  border: 1px solid #abefc6;
+  border-radius: 9px;
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+footer {
+  padding: 23px 20px;
+  color: var(--muted);
+  background: #ffffff;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  text-align: center;
+}
+
+footer span {
+  color: var(--text);
+  font-weight: 750;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN
+========================================= */
+
+@media (max-width: 850px) {
+  /* Navbar — stacks vertically on tablet */
+  .navbar {
+    height: auto;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px 22px;
+  }
+
+  .navbar nav {
+    justify-content: flex-start;
+    width: 100%;
+    gap: 4px;
+  }
+
+  /* Hero — slightly reduced padding on tablet */
+  .hero {
+    min-height: 420px;
+    border-radius: 20px;
+  }
+
+  .main-content {
+    padding: 30px 20px 45px;
+  }
+
+  .project-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .content-card {
+    padding: 27px;
+  }
+}
+
+@media (max-width: 520px) {
+  body {
+    font-size: 14px;
+  }
+
+  /* Navbar — compact mobile */
+  .navbar {
+    padding: 12px 16px;
+  }
+
+  .navbar nav {
+    gap: 3px;
+  }
+
+  .navbar nav > a,
+  .navbar nav > button {
+    padding: 0 10px;
+    font-size: 12px;
+    height: 34px;
+  }
+
+  /* Navbar contact pill — keep full style on mobile, just smaller */
+  .navbar nav > a.nav-contact {
+    padding: 0 12px;
+  }
+
+  .main-content {
+    padding: 20px 14px 36px;
+  }
+
+  /* Hero — mobile: remove orb animations to save paint cost */
+  .hero {
+    padding: 56px 20px;
+    border-radius: 18px;
+    min-height: 340px;
+  }
+
+  .hero::before,
+  .hero::after {
+    display: none;
+  }
+
+  .hero h1 {
+    letter-spacing: -0.04em;
+  }
+
+  .hero > p {
+    font-size: 15px;
+  }
+
+  .content-card {
+    padding: 22px 18px;
+  }
+
+  #project-form {
+    padding: 23px 18px;
+  }
+
+  .project-card {
+    padding: 20px;
+  }
+
+  .project-image {
+    height: 165px;
+  }
+
+  form button[type="submit"] {
+    width: 100%;
+  }
+
+  form button[type="button"] {
+    margin-left: 0;
+  }
+}

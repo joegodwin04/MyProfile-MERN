@@ -1,0 +1,32 @@
+
+/*
+  index.css — Minimal reset only.
+  All design tokens, layout, and component styles live in App.css.
+  This file previously duplicated navbar, hero, card, and grid rules that
+  conflicted with App.css — those have been moved/consolidated there.
+*/
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+img,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+}

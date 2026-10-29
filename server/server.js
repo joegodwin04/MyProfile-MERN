@@ -18,7 +18,7 @@ app.use(express.json());
 // Authentication routes
 app.use("/api/auth", authRoutes);
 
-// Connect to MongoDB
+// Connect to local MongoDB
 mongoose
   .connect("mongodb://127.0.0.1:27017/myprofile")
   .then(() => {
